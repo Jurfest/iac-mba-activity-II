@@ -6,7 +6,7 @@
     <br /> 
     <img align="center" src="https://upload.wikimedia.org/wikipedia/commons/2/24/Ansible_logo.svg" alt="Ansible Logo" width="100"/>
     and
-    <img align="center" src="https://www.vectorlogo.zone/logos/terraformio/terraformio-ar21.svg" alt="Terraform Logo" width="210"/>
+    <img align="center" src="https://www.vectorlogo.zone/logos/terraformio/terraformio-ar21.svg" alt="Terraform Logo" width="200"/>
   </h1>
 
 </div>
