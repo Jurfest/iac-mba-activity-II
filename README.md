@@ -5,8 +5,7 @@
 
   <img src="https://www.vectorlogo.zone/logos/terraformio/terraformio-ar21.svg" alt="Terraform Logo" width="100"/>
 
-  <h1>Infrastructure Automation on AWS with</h1>
-  <h1>Terraform and Ansible</h1>
+  <h1>Infrastructure Automation on AWS with <br> Terraform and Ansible</h1>
 
 </div>
 
