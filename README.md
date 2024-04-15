@@ -1,15 +1,14 @@
-# <div align="center">
-#  <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" alt="AWS Logo" width="100"/>
+<div align="center">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" alt="AWS Logo" width="100"/>
 
-#  <h1>Infrastructure Automation on AWS with</h1>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/2/24/Ansible_logo.svg" alt="Ansible Logo" width="100"/>
 
-#  <img src="https://upload.wikimedia.org/wikipedia/commons/2/24/Ansible_logo.svg" alt="Ansible Logo" width="100"/>
+  <img src="https://www.vectorlogo.zone/logos/terraformio/terraformio-ar21.svg" alt="Terraform Logo" width="100"/>
 
-#  <h1>Terraform and Ansible</h1>
+  <h1>Infrastructure Automation on AWS with</h1>
+  <h1>Terraform and Ansible</h1>
 
-#  <img src="https://www.vectorlogo.zone/logos/terraformio/terraformio-ar21.svg" alt="Terraform Logo" width="100"/>
-
-# </div>
+</div>
 
 This project aims to automate the infrastructure of a startup hosted on AWS, using Terraform and Ansible. The infrastructure consists of EC2 servers for an application that uses MongoDB, Go, and React.
 
