@@ -1,0 +1,38 @@
+# ---
+# - name: Configure control node
+#   hosts: managed_node
+#   become: true
+#   tasks:
+#     tasks:
+#     - name: Install Apache web server
+#       package:
+#         name: httpd
+#         state: present
+
+#     - name: Create HTML page
+#       template:
+#         src: templates/page_template.html
+#         dest: /var/www/html/index.html
+
+---
+- name: Configure control node
+  hosts: control_node
+  become: true
+  tasks:
+    - name: Install Apache web server
+      package:
+        name: httpd
+        state: present
+        
+    - name: Copy HTML template file to control node
+      copy:
+        src: ../../roles/control_node/templates/index.html.j2
+        dest: /var/www/html/index.html
+        mode: "0644"
+      notify: Restart Apache   # Se necessário, reinicie o servidor web após copiar o arquivo HTML
+
+    - name: Ensure Apache service is running and enabled
+      service:
+        name: httpd
+        state: started
+        enabled: yes
