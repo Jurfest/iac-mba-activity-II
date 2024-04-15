@@ -34,6 +34,10 @@ func main() {
 	controlNodeOutput := "control_node_public_ip"
 	managedNodeOutput := "managed_node_public_ip"
 
+	// Username and private key path for SSH connection
+	ansibleSSHUser := "ec2-user"
+	ansibleSSHPrivateKey := "../../../../AWS/mba-key-pair.pem"
+
 	// Navigate to the Terraform directory
 	err = os.Chdir(terraformDir)
 	if err != nil {
@@ -76,11 +80,12 @@ func main() {
 
 	// Create the Ansible inventory file
 	inventoryContent := fmt.Sprintf(`[control_node]
-%s
+%s ansible_ssh_user=%s ansible_ssh_private_key_file=%s
 
 [managed_node]
 %s
-`, controlNodeIP, managedNodeIP)
+`, controlNodeIP, ansibleSSHUser, ansibleSSHPrivateKey, managedNodeIP)
+
 
 	err = ioutil.WriteFile(filepath.Join(currentDir, "inventory.ini"), []byte(inventoryContent), 0644)
 	if err != nil {
