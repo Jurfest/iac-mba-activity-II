@@ -22,11 +22,12 @@ Automate the initial configuration of servers, install and configure application
 1. Clone this repository:
 
 ```bash
-git clone https://github.com/seu-usuario/nome-do-repositorio.git
+git clone https://github.com/jurfest/iac-mba-activity-II
 ```
 
 2. Follow the installation and configuration instructions in each directory of the project:
 
+- `.github/`: Configuration for GitHub Actions.
 - `terraform/`: Infrastructure configuration with Terraform.
 - `ansible/`: Ansible playbooks for configuration and management of the infrastructure.
 - `ci-cd/`: Configuration of the CI/CD pipeline for automated testing and deployment.
