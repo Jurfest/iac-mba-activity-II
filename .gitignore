@@ -7,10 +7,7 @@
 **/*.tfplan
 
 # Ansible
-**/hosts.ini
-
-# SSH/Keys
-ssh-keys
+**/inventory.ini
 
 # Log files
 *.log
