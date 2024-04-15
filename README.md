@@ -4,9 +4,9 @@
   <h1>
     Infrastructure Automation on AWS with 
     <br> 
-    <img src="https://upload.wikimedia.org/wikipedia/commons/2/24/Ansible_logo.svg" alt="Ansible Logo" width="100"/>
+    <img align="center" src="https://upload.wikimedia.org/wikipedia/commons/2/24/Ansible_logo.svg" alt="Ansible Logo" width="100"/>
     Terraform and Ansible
-    <img src="https://www.vectorlogo.zone/logos/terraformio/terraformio-ar21.svg" alt="Terraform Logo" width="100"/>
+    <img align="center" src="https://www.vectorlogo.zone/logos/terraformio/terraformio-ar21.svg" alt="Terraform Logo" width="100"/>
   </h1>
 
 </div>
