@@ -1,0 +1,16 @@
+# Terraform
+**/.terraform/
+**/*.tfstate
+**/*.tfstate.*
+**/.terraform.lock.hcl
+**/terraform.tfstate.backup
+**/*.tfplan
+
+# Ansible
+**/hosts.ini
+
+# SSH/Keys
+ssh-keys
+
+# Log files
+*.log
