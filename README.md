@@ -2,14 +2,10 @@
 
   <h1>
     Infrastructure Automation on
-    <img align="center" src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" alt="AWS Logo" width="100"/>
-    <br /> 
-    with 
+    <img align="center" src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" alt="AWS Logo" width="100"/> with 
     <br /> 
     <img align="center" src="https://upload.wikimedia.org/wikipedia/commons/2/24/Ansible_logo.svg" alt="Ansible Logo" width="100"/>
-    <br />
     and
-    <br />
     <img align="center" src="https://www.vectorlogo.zone/logos/terraformio/terraformio-ar21.svg" alt="Terraform Logo" width="200"/>
   </h1>
 
