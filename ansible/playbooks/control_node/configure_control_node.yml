@@ -29,7 +29,7 @@
         src: ../../roles/control_node/templates/index.html.j2
         dest: /var/www/html/index.html
         mode: "0644"
-      notify: Restart Apache   # Se necessário, reinicie o servidor web após copiar o arquivo HTML
+      notify: Restart Apache   # If necessary, restart the web server after copying the HTML file
 
     - name: Ensure Apache service is running and enabled
       service:

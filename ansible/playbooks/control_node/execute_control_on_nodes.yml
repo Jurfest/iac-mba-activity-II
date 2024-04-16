@@ -1,0 +1,8 @@
+---
+- name: Execute playbook for managed nodes configuration
+  hosts: control_node  # Executará localmente no servidor de controle
+  gather_facts: no  # Não é necessário coletar fatos
+
+  tasks:
+    - name: Execute o playbook de configuração do servidor
+      command: ansible-playbook -i /../../inventory.ini /../managed_nodes/configure_managed_node.yml

@@ -1,0 +1,46 @@
+---
+- name: Configure managed server (AWS EC2 instance target host)
+  hosts: managed_node
+  become: true
+
+  tasks:
+    - name: Update package cache
+      package:
+        name: '*'
+        state: latest
+      become: true
+
+    - name: Install required packages
+      package:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - package1
+        - package2
+        - package3
+      become: true
+
+    - name: Add user
+      user:
+        name: johndoe
+        password: $6$rounds=656000$OHRGKwdSn3XzDNLb$zn7SL3VzLPC5tTbUJ5VlSYF5iFvH6sDNElX0x8X5sDeWsn5KIZ/WgjifwMZwMxUfyuxKuMNcF6usGiCCHPp2G0
+        state: present
+      become: true
+
+    - name: Add user to sudo group
+      user:
+        name: johndoe
+        groups: wheel
+        append: yes
+      become: true
+
+    - name: Set up firewall
+      firewalld:
+        state: enabled
+        permanent: true
+        service: "{{ item }}"
+        immediate: true
+      loop:
+        - ssh
+        - http
+      become: true
