@@ -83,8 +83,8 @@ func main() {
 %s ansible_ssh_user=%s ansible_ssh_private_key_file=%s
 
 [managed_node]
-%s
-`, controlNodeIP, ansibleSSHUser, ansibleSSHPrivateKey, managedNodeIP)
+%s ansible_ssh_user=%s
+`, controlNodeIP, ansibleSSHUser, ansibleSSHPrivateKey, managedNodeIP, ansibleSSHUser)
 
 
 	err = ioutil.WriteFile(filepath.Join(currentDir, "inventory.ini"), []byte(inventoryContent), 0644)

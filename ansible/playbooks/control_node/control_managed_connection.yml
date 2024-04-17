@@ -1,52 +1,52 @@
 ---
-# This playbook should be the first one to run. It performs a configuration on 
-# SSH keys that allows the control node to access the managed node without 
-# explicitly specifying the public key.
+# This playbook should be executed as the initial step. It configures SSH keys
+# to enable the control node to access the managed node without explicitly
+# specifying the public key.
 
-- name: Gerar chave SSH no nó de controle
+- name: Generate SSH key on control node
   hosts: control_node
   tasks:
-    - name: Gerar chave SSH e salvar em uma variável
+    - name: Generate SSH key and save to a variable
       shell: ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -q -N ""
       args:
         creates: ~/.ssh/id_rsa
       register: ssh_keygen_output
 
-    - name: Copiar chave pública gerada para o controlador
+    - name: Copy generated public key to the controller
       fetch:
         src: ~/.ssh/id_rsa.pub
         dest: /tmp/ssh_key.pub
         flat: yes
 
-- name: Adicionar chave pública ao arquivo authorized_keys no nó gerenciado
+- name: Add public key to authorized_keys file on managed node
   hosts: managed_node
   tasks:
-    - name: Adicionar chave pública ao arquivo authorized_keys
+    - name: Add public key to authorized_keys file
       authorized_key:
         user: ec2-user
         key: "{{ lookup('file', '/tmp/ssh_key.pub') }}"
         state: present
 
-# - name: Gerar e adicionar chave SSH no nó de controle
+# - name: Generate and add SSH key on control node
 #   hosts: control_node
 #   tasks:
-#     - name: Gerar chave SSH
+#     - name: Generate SSH key
 #       shell: ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -q -N ""
 #       args:
 #         creates: ~/.ssh/id_rsa
 
-#     - name: Extrair chave pública
+#     - name: Extract public key
 #       shell: cat ~/.ssh/id_rsa.pub
 #       register: public_key_output
 
-#     - name: Definir chave pública como uma variável
+#     - name: Set public key as a variable
 #       set_fact:
 #         ssh_public_key: "{{ public_key_output.stdout }}"
 
-# - name: Adicionar chave pública ao arquivo authorized_keys no nó gerenciado
+# - name: Add public key to authorized_keys file on managed node
 #   hosts: managed_node
 #   tasks:
-#     - name: Adicionar chave pública ao arquivo authorized_keys
+#     - name: Add public key to authorized_keys file
 #       lineinfile:
 #         path: ~/.ssh/authorized_keys
 #         line: "{{ ssh_public_key }}"

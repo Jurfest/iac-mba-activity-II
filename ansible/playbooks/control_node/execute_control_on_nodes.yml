@@ -1,8 +1,39 @@
 ---
-- name: Execute playbook for managed nodes configuration
-  hosts: control_node  # Executará localmente no servidor de controle
-  gather_facts: no  # Não é necessário coletar fatos
+# This playbook should be the third one to run. It copies configuration files to
+# the control node and then executes a playbook to configure managed nodes.
+- name: Copy configuration files to control node
+  hosts: control_node
+  tasks:
+    - name: Create ansible/managed_nodes directory if it does not exist
+      ansible.builtin.file:
+        path: ./ansible/managed_nodes
+        state: directory
+
+    - name: Copy inventory file to control node
+      ansible.builtin.copy:
+        src: ../../inventory.ini
+        dest: ./ansible/inventory.ini
+
+    - name: Copy configuration playbook to control node
+      ansible.builtin.copy:
+        src: ../managed_nodes/configure_managed_node.yml
+        dest: ./ansible/managed_nodes/configure_managed_node.yml
+
+- name: Execute playbook for configuring managed nodes
+  hosts: control_node
+  gather_facts: no
 
   tasks:
-    - name: Execute o playbook de configuração do servidor
-      command: ansible-playbook -i /../../inventory.ini /../managed_nodes/configure_managed_node.yml
+    - name: Execute playbook to configure managed server asynchronously
+      ansible.builtin.command: ansible-playbook -i ./ansible/inventory.ini ./ansible/managed_nodes/configure_managed_node.yml
+      async: 60
+      poll: 0
+      register: async_result
+
+    - name: Wait for completion of execution on control node
+      async_status:
+        jid: "{{ async_result.ansible_job_id }}"
+      register: job_result
+      until: job_result.finished
+      retries: 2
+      delay: 10

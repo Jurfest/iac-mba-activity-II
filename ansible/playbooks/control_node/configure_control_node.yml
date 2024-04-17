@@ -1,20 +1,8 @@
-# ---
-# - name: Configure control node
-#   hosts: managed_node
-#   become: true
-#   tasks:
-#     tasks:
-#     - name: Install Apache web server
-#       package:
-#         name: httpd
-#         state: present
-
-#     - name: Create HTML page
-#       template:
-#         src: templates/page_template.html
-#         dest: /var/www/html/index.html
-
 ---
+# This playbook is executed second and configures Apache to serve a web page
+# explaining the purpose of this EC2 instance, which acts as a control node
+# for executing Ansible configurations on other virtual machines.
+
 - name: Configure control node
   hosts: control_node
   become: true
