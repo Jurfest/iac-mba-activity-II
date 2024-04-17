@@ -43,6 +43,14 @@ resource "aws_instance" "control_node" {
       "sudo yum update -y",
       "sudo yum install -y ansible",
     ]
+    # Alternative commands to install ansible on Ubuntu (18.04 or later)
+    # # python3 & pip are installed
+    # "sudo apt update -y",
+    # "sudo apt install python3-pip",
+    
+    # # install ansible
+    # "sudo pip3 install ansible --upgrade"
+    # # or try:  pip3 install ansible --upgrade --user
 
     connection {
       type        = "ssh"
@@ -65,20 +73,4 @@ resource "aws_instance" "managed_node" {
   }
 
   vpc_security_group_ids = [aws_security_group.instance_sg.id]
-
-  # Configure SSH authentication during provisioning
-  # provisioner "remote-exec" {
-  #   inline = [
-  #     # Add the SSH public key of the control node to authorized_keys
-  #     "echo '${aws_instance.control_node.key_name}' >> ~/.ssh/authorized_keys",
-  #   ]
-
-  #   connection {
-  #     type        = "ssh"
-  #     user        = var.username
-  #     private_key = file("../../../../AWS/${var.key_name}.pem")
-  #     host        = self.public_ip
-  #     timeout     = "1m"
-  #   }
-  # }
 }

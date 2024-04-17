@@ -1,0 +1,4 @@
+# ---
+# dependencies:
+#   - role: database
+    # when: variavel_condicional == "valor_esperado"

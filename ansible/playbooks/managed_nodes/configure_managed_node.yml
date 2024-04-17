@@ -3,6 +3,9 @@
   hosts: managed_node
   become: true
 
+  # roles:
+  #   - minha_role
+
   tasks:
     - name: Print success message
       debug:
@@ -37,6 +40,23 @@
     #     groups: wheel
     #     append: yes
     #   become: true
+
+    # - name: Criar um grupo
+    #   group:
+    #     name: meugrupo
+    #     state: present
+    
+    # - name: Criar um usuário
+    #   user: 
+    #     name: meuusuario
+    #     groups: meugrupo
+    #     state: present
+
+    # DB interaction
+    - name: Executar uma consulta SQL
+      mysql_db:
+        name: minha_database
+        state: present
 
     # - name: Set up firewall
     #   firewalld:
