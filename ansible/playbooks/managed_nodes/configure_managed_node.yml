@@ -1,4 +1,9 @@
 ---
+# Adhering to the declarative paradigm, this configures a 
+# managed server, specifically an AWS EC2 instance. Tasks include 
+# package installation, cache update, SQL query execution, etc.
+
+
 - name: Configure managed server (AWS EC2 instance target host)
   hosts: managed_node
   become: true
@@ -7,8 +12,9 @@
   #   - minha_role
 
   tasks:
+    # The debug module print a message on the terminal for debugging purpose
     - name: Print success message
-      debug:
+      debug: 
         msg: "The control node successfully ran the managed_node playbook."
 
     - name: Update package cache
@@ -17,16 +23,21 @@
         state: latest
       become: true
 
-    # - name: Install required packages
-    #   package:
-    #     name: "{{ item }}"
-    #     state: present
-    #   loop:
-    #     - package1
-    #     - package2
-    #     - package3
-    #   become: true
+    # To get detailed information about this important ansible module, "package", 
+    # you can use ad-hoc ansible command, within imperative paradigm:
+    # $ ansible-doc package
+    - name: Install required packages
+      package:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - nginx
+        - package2
+        - package3
+      become: true
 
+    # One advantage of using ansible modules, like user, is that ansible modules
+    # are idempotent
     # - name: Add user
     #   user:
     #     name: johndoe
