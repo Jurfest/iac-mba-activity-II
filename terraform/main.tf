@@ -1,16 +1,3 @@
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 5.45"
-    }
-  }
-}
-
-provider "aws" {
-  region = "sa-east-1"
-}
-
 # Create security group
 resource "aws_security_group" "instance_sg" {
   name        = "instance-sg"
@@ -41,8 +28,8 @@ resource "aws_security_group" "instance_sg" {
 # Create EC2 instance to serve as the Ansible control server
 resource "aws_instance" "control_node" {
   ami           = "ami-0f7d1f63870577e29" # Amazon Linux 2023 AMI
-  instance_type = "t2.micro"
-  key_name      = "mba-key-pair" # Key pair name, existent in AWS account
+  instance_type = var.instance_type
+  key_name      = var.key_name # Key pair name, existent in AWS account
 
   tags = {
     Name = "ControlNode"
@@ -59,8 +46,8 @@ resource "aws_instance" "control_node" {
 
     connection {
       type        = "ssh"
-      user        = "ec2-user"
-      private_key = file("../../../../AWS/mba-key-pair.pem")
+      user        = var.username
+      private_key = file("../../../../AWS/${var.key_name}.pem")
       host        = self.public_ip
       timeout     = "1m"
     }
@@ -70,8 +57,8 @@ resource "aws_instance" "control_node" {
 # Create EC2 instance to serve as a target server
 resource "aws_instance" "managed_node" {
   ami           = "ami-0f7d1f63870577e29" # Amazon Linux 2023 AMI
-  instance_type = "t2.micro"
-  key_name      = "mba-key-pair" # Key pair name, existent in AWS account
+  instance_type = var.instance_type
+  key_name      = var.key_name # Key pair name, existent in AWS account
 
   tags = {
     Name = "ManagedNode"
@@ -80,27 +67,18 @@ resource "aws_instance" "managed_node" {
   vpc_security_group_ids = [aws_security_group.instance_sg.id]
 
   # Configure SSH authentication during provisioning
-  provisioner "remote-exec" {
-    inline = [
-      # Add the SSH public key of the control node to authorized_keys
-      "echo '${aws_instance.control_node.key_name}' >> ~/.ssh/authorized_keys",
-    ]
+  # provisioner "remote-exec" {
+  #   inline = [
+  #     # Add the SSH public key of the control node to authorized_keys
+  #     "echo '${aws_instance.control_node.key_name}' >> ~/.ssh/authorized_keys",
+  #   ]
 
-    connection {
-      type        = "ssh"
-      user        = "ec2-user"
-      private_key = file("../../../../AWS/mba-key-pair.pem")
-      host        = self.public_ip
-      timeout     = "1m"
-    }
-  }
-}
-
-# Output public IP addresses
-output "control_node_public_ip" {
-  value = aws_instance.control_node.public_ip
-}
-
-output "managed_node_public_ip" {
-  value = aws_instance.managed_node.public_ip
+  #   connection {
+  #     type        = "ssh"
+  #     user        = var.username
+  #     private_key = file("../../../../AWS/${var.key_name}.pem")
+  #     host        = self.public_ip
+  #     timeout     = "1m"
+  #   }
+  # }
 }
