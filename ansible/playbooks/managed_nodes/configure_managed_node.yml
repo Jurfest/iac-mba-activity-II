@@ -3,7 +3,8 @@
 # managed server, specifically an AWS EC2 instance. Tasks include 
 # package installation, cache update, SQL query execution, etc.
 
-
+# A playbook is a list of one or more plays
+# A play defines a list of tasks
 - name: Configure managed server (AWS EC2 instance target host)
   hosts: managed_node
   become: true
@@ -17,6 +18,7 @@
       debug: 
         msg: "The control node successfully ran the managed_node playbook."
 
+    # A task is a call of a module
     - name: Update package cache
       package:
         name: '*'

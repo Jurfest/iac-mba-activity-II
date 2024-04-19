@@ -6,11 +6,14 @@
 - name: Generate SSH key on control node
   hosts: control_node
   tasks:
+    # Each task has an output
     - name: Generate SSH key and save to a variable
       shell: ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -q -N ""
       args:
         creates: ~/.ssh/id_rsa
       register: ssh_keygen_output
+      # The register keyword is used to assign a value to a new variable (ssh_keygen_output).
+      # This kind of variables are denomined as registered variables
 
     - name: Copy generated public key to the controller
       fetch:

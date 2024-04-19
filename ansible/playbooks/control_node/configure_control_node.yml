@@ -6,10 +6,13 @@
 - name: Configure control node
   hosts: control_node
   become: true
+  vars: 
+    webserver: httpd
+
   tasks:
     - name: Install Apache web server
       package:
-        name: httpd
+        name: "{{ webserver }}"
         state: present
         
     - name: Copy HTML template file to control node
@@ -21,6 +24,6 @@
 
     - name: Ensure Apache service is running and enabled
       service:
-        name: httpd
+        name: "{{ webserver }}"
         state: started
         enabled: yes
