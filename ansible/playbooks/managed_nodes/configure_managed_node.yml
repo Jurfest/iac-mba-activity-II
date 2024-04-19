@@ -26,6 +26,7 @@
         state: latest
       become: true
 
+    # Iterate with "loop" and "item" variable
     # To get detailed information about this important ansible module, "package", 
     # you can use ad-hoc ansible command, within imperative paradigm:
     # $ ansible-doc package
