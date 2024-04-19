@@ -1,0 +1,10 @@
+- name: Check if Nginx package is installed
+  stat:
+    path: /usr/sbin/nginx
+  register: nginx_installed
+
+- name: Start Nginx service
+  service:
+    name: nginx
+    state: started
+  when: nginx_installed.stat.exists
