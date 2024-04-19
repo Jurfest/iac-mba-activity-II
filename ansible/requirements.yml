@@ -1,0 +1,20 @@
+roles:
+  # - src:
+  #   name:
+  #   version:
+
+  # java is required for jenkins role install
+  - src: geerlingguy.java
+    name: geerlingguy.java
+
+  - src: geerlingguy.jenkins
+    name: geerlingguy.jenkins
+
+  - src: geerlingguy.docker
+    name: geerlingguy.docker
+    
+  - src: geerlingguy.kubernetes
+    name: geerlingguy.kubernetes
+
+collections:
+  - newswangerd.collection_demo
