@@ -39,6 +39,10 @@
         # - package3
       become: true
 
+    - name: Check if Nginx is installed and start web server
+      include_role:
+        name: check_nginx
+
     # One advantage of using ansible modules, like user, is that ansible modules
     # are idempotent
     # - name: Add user
