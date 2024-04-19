@@ -8,6 +8,7 @@
 
 # Ansible
 **/inventory.ini
+**/remote_inventory.ini
 create_hosts
 **/key.txt
 

@@ -9,10 +9,10 @@
         path: ./ansible/managed_nodes
         state: directory
 
-    - name: Copy inventory file to control node
+    - name: Copy (remote) inventory file to control node
       ansible.builtin.copy:
-        src: ../../inventory.ini
-        dest: ./ansible/inventory.ini
+        src: ../../remote_inventory.ini
+        dest: ./ansible/remote_inventory.ini
 
     - name: Copy configuration playbook to control node
       ansible.builtin.copy:
@@ -35,7 +35,7 @@
 
   tasks:
     - name: Execute playbook to configure managed server asynchronously
-      ansible.builtin.command: ansible-playbook -i ./ansible/inventory.ini ./ansible/managed_nodes/configure_managed_node.yml
+      ansible.builtin.command: ansible-playbook -i ./ansible/remote_inventory.ini ./ansible/managed_nodes/configure_managed_node.yml
       async: 60
       poll: 0
       register: async_result

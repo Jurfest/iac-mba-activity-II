@@ -26,7 +26,7 @@ func main() {
 
 	// Directory where Terraform files are located relative to the ansible directory
 	terraformDir := "../terraform"
-	
+
 	// Directory where Ansible files are located relative to the terraform directory
 	ansibleDir := "../ansible"
 
@@ -74,24 +74,55 @@ func main() {
 	// Navigate back to the Ansible script directory
 	err = os.Chdir(ansibleDir)
 	if err != nil {
-			fmt.Println("Error changing directory:", err)
-			os.Exit(1)
+		fmt.Println("Error changing directory:", err)
+		os.Exit(1)
 	}
 
-	// Create the Ansible inventory file
+	// Create the Ansible inventory files
 	inventoryContent := fmt.Sprintf(`[control_node]
-%s ansible_ssh_user=%s ansible_ssh_private_key_file=%s
+%s
+
+[control_node:vars]
+ansible_ssh_user=%s
+ansible_ssh_private_key_file=%s
 
 [managed_node]
-%s ansible_ssh_user=%s
-`, controlNodeIP, ansibleSSHUser, ansibleSSHPrivateKey, managedNodeIP, ansibleSSHUser)
+%s
 
+[managed_node:vars]
+ansible_ssh_user=%s
+ansible_ssh_private_key_file=%s
 
+`, controlNodeIP, ansibleSSHUser, ansibleSSHPrivateKey, managedNodeIP, ansibleSSHUser, ansibleSSHPrivateKey)
+
+	// Write inventory.ini file
 	err = ioutil.WriteFile(filepath.Join(currentDir, "inventory.ini"), []byte(inventoryContent), 0644)
 	if err != nil {
 		fmt.Println("Error creating inventory file:", err)
 		os.Exit(1)
 	}
 
-	fmt.Println("Inventory file created at", filepath.Join(currentDir, "inventory.ini"))
+	// Write remote_inventory.ini file
+	remoteInventoryContent := fmt.Sprintf(`[control_node]
+%s
+
+[control_node:vars]
+ansible_ssh_user=%s
+ansible_ssh_private_key_file=%s
+
+[managed_node]
+%s
+
+[managed_node:vars]
+ansible_ssh_user=%s
+
+`, controlNodeIP, ansibleSSHUser, ansibleSSHPrivateKey, managedNodeIP, ansibleSSHUser)
+
+	err = ioutil.WriteFile(filepath.Join(currentDir, "remote_inventory.ini"), []byte(remoteInventoryContent), 0644)
+	if err != nil {
+		fmt.Println("Error creating remote inventory file:", err)
+		os.Exit(1)
+	}
+
+	fmt.Println("Inventory files created at", filepath.Join(currentDir, "inventory.ini"), "and", filepath.Join(currentDir, "remote_inventory.ini"))
 }
