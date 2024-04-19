@@ -9,7 +9,8 @@
   hosts: managed_node
   become: true
 
-  # roles:
+  roles:
+    - specs_report
   #   - minha_role
 
   tasks:
@@ -34,8 +35,8 @@
         state: present
       loop:
         - nginx
-        - package2
-        - package3
+        # - package2
+        # - package3
       become: true
 
     # One advantage of using ansible modules, like user, is that ansible modules
@@ -66,10 +67,10 @@
     #     state: present
 
     # DB interaction
-    - name: Executar uma consulta SQL
-      mysql_db:
-        name: minha_database
-        state: present
+    # - name: Executar uma consulta SQL
+    #   mysql_db:
+    #     name: minha_database
+    #     state: present
 
     # - name: Set up firewall
     #   firewalld:

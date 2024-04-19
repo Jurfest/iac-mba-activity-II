@@ -1,0 +1,19 @@
+---
+- name: Print Ansible facts
+  debug:
+    var: ansible_facts
+
+# - name: Generate specs report
+#   copy:
+#     content: |
+#       Distribution: {{ ansible_facts.distribution }}
+#       Distribution Release: {{ ansible_facts.distribution_release }}
+#       Distribution Version: {{ ansible_facts.distribution_version }}
+#       CPU core: {{ ansible_facts.processor_cores }} cores
+#       Total Memory: {{ ansible_facts.memtotal_mb }} mb
+#     dest: /tmp/specs.report
+
+- name: Generate specs report
+  template:
+    src: specs_report.j2
+    dest: /tmp/specs.report
