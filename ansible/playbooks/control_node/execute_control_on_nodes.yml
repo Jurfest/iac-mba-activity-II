@@ -18,6 +18,16 @@
       ansible.builtin.copy:
         src: ../managed_nodes/configure_managed_node.yml
         dest: ./ansible/managed_nodes/configure_managed_node.yml
+    
+    - name: Copy managed nodes roles to control node
+      ansible.builtin.copy:
+        src: ../../roles/managed_nodes/
+        dest: ./ansible/managed_nodes/roles
+    
+    # - name: Copy Ansibl configuration file to control node
+    #   ansible.builtin.copy:
+    #     src: ../../ansible.cfg
+    #     dest: ./ansible/ansible.cfg
 
 - name: Execute playbook for configuring managed nodes
   hosts: control_node
@@ -35,5 +45,5 @@
         jid: "{{ async_result.ansible_job_id }}"
       register: job_result
       until: job_result.finished
-      retries: 2
-      delay: 10
+      retries: 3
+      delay: 20
