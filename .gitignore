@@ -9,6 +9,7 @@
 # Ansible
 **/inventory.ini
 create_hosts
+**/key.txt
 
 # Log files
 *.log
