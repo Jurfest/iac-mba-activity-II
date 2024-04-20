@@ -47,7 +47,7 @@ resource "aws_instance" "control_node" {
     # # python3 & pip are installed
     # "sudo apt update -y",
     # "sudo apt install python3-pip",
-    
+
     # # install ansible
     # "sudo pip3 install ansible --upgrade"
     # # or try:  pip3 install ansible --upgrade --user
@@ -62,14 +62,27 @@ resource "aws_instance" "control_node" {
   }
 }
 
-# Create EC2 instance to serve as a target server
-resource "aws_instance" "managed_node" {
+# Create EC2 instance for the managed application node
+resource "aws_instance" "managed_app_node" {
   ami           = "ami-0f7d1f63870577e29" # Amazon Linux 2023 AMI
   instance_type = var.instance_type
-  key_name      = var.key_name # Key pair name, existent in AWS account
+  key_name      = var.key_name # Key pair name, existing in AWS account
 
   tags = {
-    Name = "ManagedNode"
+    Name = "ManagedAppNode"
+  }
+
+  vpc_security_group_ids = [aws_security_group.instance_sg.id]
+}
+
+# Create EC2 instance for the managed database node
+resource "aws_instance" "managed_db_node" {
+  ami           = "ami-0f7d1f63870577e29" # Amazon Linux 2023 AMI
+  instance_type = var.instance_type
+  key_name      = var.key_name # Key pair name, existing in AWS account
+
+  tags = {
+    Name = "ManagedDBNode"
   }
 
   vpc_security_group_ids = [aws_security_group.instance_sg.id]
