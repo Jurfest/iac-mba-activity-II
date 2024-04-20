@@ -1,0 +1,173 @@
+{
+ "files": [
+  {
+   "name": ".",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": ".DS_Store",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "43d04b7157e25ef1654f5687a8eaa9107d3f2bbe7619ada3c5af9cca56a2d5a6",
+   "format": 1
+  },
+  {
+   "name": "plugins",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/modules",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/real_facts.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "95c3beb448486f21f957c27ee8c45f3fdcc2fcc3edb876b976b945e08a6af315",
+   "format": 1
+  },
+  {
+   "name": "meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "meta/runtime.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "08cd605fa3e4531e68fe54422a0a962305bc042b9f321d4202f568b59d64b2b9",
+   "format": 1
+  },
+  {
+   "name": "roles",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/deltoid",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/deltoid/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/deltoid/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e9adfe01a6391a4459b90e5884053a9fec78781331ae4cd21d47e653e5c6a0ae",
+   "format": 1
+  },
+  {
+   "name": "roles/deltoid/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/deltoid/meta/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "03ad740c2079d88c3e2177f0efcbf25b0c34f1d15cb9dd6d486a09aa54524e14",
+   "format": 1
+  },
+  {
+   "name": "roles/deltoid/README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e7c182d2d3febd45fc416a8fbbf71eeddb060157190007b2453193f155e7df5b",
+   "format": 1
+  },
+  {
+   "name": "roles/factoid",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/factoid/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/factoid/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "1c499484a5ff5e982f47da4174efa90192673d11f33c2ffa2d92434acb801d3a",
+   "format": 1
+  },
+  {
+   "name": "roles/factoid/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/factoid/meta/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "0e12a7a6eb10754c9581edac7ccf63712ee57dceffdd4a9a68106447a1e2ded2",
+   "format": 1
+  },
+  {
+   "name": "roles/factoid/README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "145d2fcffa8446329d3206657de6dffc0afdc09f93acfb8f033ce0d7fff89e78",
+   "format": 1
+  },
+  {
+   "name": "docs",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "docs/.DS_Store",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "d6df29f276bb3ec82b5101faf142a3c92cb8165cea095f77d54cf66b88a270a7",
+   "format": 1
+  },
+  {
+   "name": "docs/test_guide.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "223c10054ca6c6037e9194ecbbaffa652a2930c13e63997c5a76b085443e200d",
+   "format": 1
+  },
+  {
+   "name": "README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "0feca15aa2019b8bdc4247b39bf9c475ee2bbf180267c4761acd322ee01fd0ce",
+   "format": 1
+  }
+ ],
+ "format": 1
+}

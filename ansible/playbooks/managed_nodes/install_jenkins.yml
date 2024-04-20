@@ -1,11 +1,14 @@
 - name: Install Jenkins
   hosts: managed_node
   become: true
-
+  
   vars:
- #   jenkins_hostname: jenkins.example.com
+    # jenkins_hostname: jenkins.example.com
     java_packages:
-      - openjdk-8-jdk
+      - java-11-openjdk
+
+      # openjdk 21.0.2 2024-01-16 LTS
+
   roles:
     - role: geerlingguy.java
     - role: geerlingguy.jenkins

@@ -1,0 +1,14 @@
+- name: Play usage collections
+  hosts: managed_node
+
+  collections:
+    - newswangerd.collection_demo
+
+  tasks:
+    - name: Module usage from collection
+      real_facts:
+        name: Diego
+
+    - name: Role usage from collection
+      import_role:
+        name: factoid

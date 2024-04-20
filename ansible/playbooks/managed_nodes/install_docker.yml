@@ -1,0 +1,23 @@
+- name: Install Docker engine
+  hosts: managed_node
+  become: true
+
+  # vars:
+  #     pip_install_packages:
+  #       - name: docker
+
+  # roles:
+  # - geerlingguy.pip
+  # - geerlingguy.docker
+
+  tasks:
+  - name: Install Docker if it is not installed
+    import_role:
+      name: geerlingguy.docker
+    vars:
+      docker_users:
+      - "{{ ansible_ssh_user }}"
+
+
+  
+

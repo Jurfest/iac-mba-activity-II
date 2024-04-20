@@ -1,0 +1,8 @@
+download_url: https://galaxy.ansible.com/api/v3/plugin/ansible/content/published/collections/artifacts/newswangerd-collection_demo-1.0.11.tar.gz
+format_version: 1.0.0
+name: collection_demo
+namespace: newswangerd
+server: https://galaxy.ansible.com/api/
+signatures: []
+version: 1.0.11
+version_url: /api/v3/plugin/ansible/content/published/collections/index/newswangerd/collection_demo/versions/1.0.11/

@@ -1,0 +1,33 @@
+{
+ "collection_info": {
+  "namespace": "newswangerd",
+  "name": "collection_demo",
+  "version": "1.0.11",
+  "authors": [
+   "David Newswanger"
+  ],
+  "readme": "README.md",
+  "tags": [
+   "demo",
+   "collection"
+  ],
+  "description": "Demo showing how to distribute modules and plugins using collections in Ansible 2.8",
+  "license": [
+   "MIT"
+  ],
+  "license_file": null,
+  "dependencies": {},
+  "repository": "https://github.com/newswangerd/collection_demo",
+  "documentation": null,
+  "homepage": null,
+  "issues": null
+ },
+ "file_manifest_file": {
+  "name": "FILES.json",
+  "ftype": "file",
+  "chksum_type": "sha256",
+  "chksum_sha256": "bec8a4a976ae82364ff68d35885bf654384c7771492e22db7fe0b4c5a0ef6981",
+  "format": 1
+ },
+ "format": 1
+}

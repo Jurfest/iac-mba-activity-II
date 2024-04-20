@@ -10,9 +10,12 @@ roles:
   - src: geerlingguy.jenkins
     name: geerlingguy.jenkins
 
+  - src: geerlingguy.pip
+    name: geerlingguy.pip
+
   - src: geerlingguy.docker
     name: geerlingguy.docker
-    
+
   - src: geerlingguy.kubernetes
     name: geerlingguy.kubernetes
 
