@@ -6,7 +6,7 @@
 # A playbook is a list of one or more plays
 # A play defines a list of tasks
 - name: Configure managed server (AWS EC2 instance target host)
-  hosts: managed_node
+  hosts: managed_app_node
   become: true
 
   roles:

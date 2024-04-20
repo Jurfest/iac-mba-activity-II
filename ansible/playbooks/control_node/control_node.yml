@@ -1,0 +1,6 @@
+- name: playbook that connects control node and managed node
+  import_playbook: ./control_managed_connections.yml
+- name: playbook that deploy a static website to describe web server purpose
+  import_playbook: ./configure_control_node.yml
+- name: playbook that execute playbooks for managed nodes
+  import_playbook: ./execute_control_on_nodes.yml
