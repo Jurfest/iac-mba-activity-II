@@ -14,17 +14,17 @@
         src: ../../remote_inventory.ini
         dest: ./ansible/remote_inventory.ini
 
-    - name: Copy configuration playbook to control node
+    - name: Copy managed_nodes playbooks to control node
       ansible.builtin.copy:
-        src: ../managed_nodes/configure_managed_node.yml
-        dest: ./ansible/managed_nodes/configure_managed_node.yml
+        src: ../managed_nodes/
+        dest: ./ansible/managed_nodes/
     
     - name: Copy managed nodes roles to control node
       ansible.builtin.copy:
         src: ../../roles/managed_nodes/
         dest: ./ansible/managed_nodes/roles
     
-    # - name: Copy Ansibl configuration file to control node
+    # - name: Copy Ansible configuration file to control node
     #   ansible.builtin.copy:
     #     src: ../../ansible.cfg
     #     dest: ./ansible/ansible.cfg
@@ -34,8 +34,8 @@
   gather_facts: no
 
   tasks:
-    - name: Execute playbook to configure managed server asynchronously
-      ansible.builtin.command: ansible-playbook -i ./ansible/remote_inventory.ini ./ansible/managed_nodes/configure_managed_node.yml
+    - name: Execute playbook to configure managed nodes for Todo full-stack application asynchronously
+      ansible.builtin.command: ansible-playbook -i ./ansible/remote_inventory.ini ./ansible/managed_nodes/todo.yml
       async: 60
       poll: 0
       register: async_result

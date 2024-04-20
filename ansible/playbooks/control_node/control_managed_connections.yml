@@ -22,7 +22,7 @@
         flat: yes
 
 - name: Add public key to authorized_keys file on managed node
-  hosts: managed_node
+  hosts: managed_nodes
   tasks:
     - name: Add public key to authorized_keys file
       authorized_key:
