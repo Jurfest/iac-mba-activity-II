@@ -131,9 +131,7 @@ managed_db_node
 
 [managed_nodes:vars]
 ansible_ssh_user=%s
-ansible_ssh_private_key_file=%s
-
-`, controlNodeIP, ansibleSSHUser, ansibleSSHPrivateKey, managedAppNodeIP, managedDatabaseNodeIP, ansibleSSHUser, "")
+`, controlNodeIP, ansibleSSHUser, ansibleSSHPrivateKey, managedAppNodeIP, managedDatabaseNodeIP, ansibleSSHUser)
 
 	err = ioutil.WriteFile(filepath.Join(currentDir, "remote_inventory.ini"), []byte(remoteInventoryContent), 0644)
 	if err != nil {
