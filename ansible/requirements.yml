@@ -1,23 +1,10 @@
 roles:
-  # - src:
-  #   name:
-  #   version:
+  - src: abdennour.golang
+    name: abdennour.golang
+    version: v1.0.12
 
-  # java is required for jenkins role install
-  - src: geerlingguy.java
-    name: geerlingguy.java
-
-  - src: geerlingguy.jenkins
-    name: geerlingguy.jenkins
-
-  - src: geerlingguy.pip
-    name: geerlingguy.pip
-
-  - src: geerlingguy.docker
-    name: geerlingguy.docker
-
-  - src: geerlingguy.kubernetes
-    name: geerlingguy.kubernetes
+  - src: geerlingguy.nodejs
+    name: geerlingguy.nodejs
 
 collections:
   - newswangerd.collection_demo
