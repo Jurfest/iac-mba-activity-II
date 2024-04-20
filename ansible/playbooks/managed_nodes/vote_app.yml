@@ -1,2 +1,0 @@
-- name: playbook that connects control node and managed node
-  import_playbook: ./configure_managed_node.yml
