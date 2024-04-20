@@ -35,7 +35,7 @@
 
   tasks:
     - name: Execute playbook to configure managed nodes for Todo full-stack application asynchronously
-      ansible.builtin.command: ansible-playbook -i ./ansible/remote_inventory.ini ./ansible/managed_nodes/vote_app.yml
+      ansible.builtin.command: ansible-playbook -i ./ansible/remote_inventory.ini ./ansible/managed_nodes/full_stack_app.yml
       async: 60
       poll: 0
       register: async_result

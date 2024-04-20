@@ -16,8 +16,14 @@ jobs:
       - name: Install Ansible
         run: sudo apt-get update && sudo apt-get install -y ansible
 
-#       - name: Run Ansible playbook
-#         run: ansible-playbook -i ./dynamic-inventory playbook.yml
-#         env:
-#           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      # - name: Configure aws credentials
+      #   uses: aws-actions/configure-aws-credentials@v4
+      #   with:
+      #     aws-region: ${{ secrets.AWS_REGION }}
+      #     role-to-assume: ${{ secrets.ROLE_ASSUME }}
+
+      - name: Run Ansible playbook
+        run: ansible-playbook -i ../../ansible/inventory.ini ../../ansible/playbooks/control_node.yml
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
