@@ -32,7 +32,8 @@ func main() {
 
 	// Terraform output names
 	controlNodeOutput := "control_node_public_ip"
-	managedNodeOutput := "managed_node_public_ip"
+	managedAppNodeOutput := "managed_app_node_public_ip"
+	managedDatabaseNodeOutput := "managed_db_node_public_ip"
 
 	// Username and private key path for SSH connection
 	ansibleSSHUser := "ec2-user"
@@ -63,10 +64,11 @@ func main() {
 
 	// Get the IPs from Terraform outputs
 	controlNodeIP := terraformOutput[controlNodeOutput].Value
-	managedNodeIP := terraformOutput[managedNodeOutput].Value
+	managedAppNodeIP := terraformOutput[managedAppNodeOutput].Value
+	managedDatabaseNodeIP := terraformOutput[managedDatabaseNodeOutput].Value
 
 	// Check if the IPs were obtained
-	if controlNodeIP == "" || managedNodeIP == "" {
+	if controlNodeIP == "" || managedAppNodeIP == "" || managedDatabaseNodeIP == "" {
 		fmt.Println("One or more IP addresses not found.")
 		os.Exit(1)
 	}
@@ -86,14 +88,21 @@ func main() {
 ansible_ssh_user=%s
 ansible_ssh_private_key_file=%s
 
-[managed_node]
+[managed_app_node]
 %s
 
-[managed_node:vars]
+[managed_db_node]
+%s
+
+[managed_nodes:children]
+managed_app_node
+managed_db_node
+
+[managed_nodes:vars]
 ansible_ssh_user=%s
 ansible_ssh_private_key_file=%s
 
-`, controlNodeIP, ansibleSSHUser, ansibleSSHPrivateKey, managedNodeIP, ansibleSSHUser, ansibleSSHPrivateKey)
+`, controlNodeIP, ansibleSSHUser, ansibleSSHPrivateKey, managedAppNodeIP, managedDatabaseNodeIP, ansibleSSHUser, ansibleSSHPrivateKey)
 
 	// Write inventory.ini file
 	err = ioutil.WriteFile(filepath.Join(currentDir, "inventory.ini"), []byte(inventoryContent), 0644)
@@ -110,13 +119,21 @@ ansible_ssh_private_key_file=%s
 ansible_ssh_user=%s
 ansible_ssh_private_key_file=%s
 
-[managed_node]
+[managed_app_node]
 %s
 
-[managed_node:vars]
-ansible_ssh_user=%s
+[managed_db_node]
+%s
 
-`, controlNodeIP, ansibleSSHUser, ansibleSSHPrivateKey, managedNodeIP, ansibleSSHUser)
+[managed_nodes:children]
+managed_app_node
+managed_db_node
+
+[managed_nodes:vars]
+ansible_ssh_user=%s
+ansible_ssh_private_key_file=%s
+
+`, controlNodeIP, ansibleSSHUser, ansibleSSHPrivateKey, managedAppNodeIP, managedDatabaseNodeIP, ansibleSSHUser, "")
 
 	err = ioutil.WriteFile(filepath.Join(currentDir, "remote_inventory.ini"), []byte(remoteInventoryContent), 0644)
 	if err != nil {
