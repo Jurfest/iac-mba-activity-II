@@ -7,7 +7,7 @@
   hosts: control_node
   become: true
   vars: 
-    webserver: httpd
+    webserver: apache2
 
   tasks:
     - name: Install Apache web server

@@ -36,7 +36,7 @@ func main() {
 	managedDatabaseNodeOutput := "managed_db_node_public_ip"
 
 	// Username and private key path for SSH connection
-	ansibleSSHUser := "ec2-user"
+	ansibleSSHUser := "ubuntu"
 	ansibleSSHPrivateKey := "../../../../AWS/mba-key-pair.pem"
 
 	// Navigate to the Terraform directory
