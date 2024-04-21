@@ -27,7 +27,7 @@ resource "aws_security_group" "instance_sg" {
 
 # Create EC2 instance to serve as the Ansible control server
 resource "aws_instance" "control_node" {
-  ami           = "ami-0f7d1f63870577e29" # Amazon Linux 2023 AMI
+  ami           = var.ami_id
   instance_type = var.instance_type
   key_name      = var.key_name # Key pair name, existent in AWS account
 
@@ -40,17 +40,14 @@ resource "aws_instance" "control_node" {
   # Install Ansible during provisioning
   provisioner "remote-exec" {
     inline = [
-      "sudo yum update -y",
-      "sudo yum install -y ansible",
+      "sudo apt update -y", # Update package lists
+      "sudo apt-get install -y software-properties-common", # Install software-properties-common for managing repositories
+      "sudo apt-add-repository --yes --update ppa:ansible/ansible", # Add Ansible PPA repository
+      "sudo apt-get install -y ansible" # Install Ansible
     ]
-    # Alternative commands to install ansible on Ubuntu (18.04 or later)
-    # # python3 & pip are installed
-    # "sudo apt update -y",
-    # "sudo apt install python3-pip",
-
-    # # install ansible
-    # "sudo pip3 install ansible --upgrade"
-    # # or try:  pip3 install ansible --upgrade --user
+    # Alternative commands to install ansible on Amazon Linux 2023
+    # "sudo yum update -y",
+    # "sudo yum install -y ansible",
 
     connection {
       type        = "ssh"
@@ -64,7 +61,7 @@ resource "aws_instance" "control_node" {
 
 # Create EC2 instance for the managed application node
 resource "aws_instance" "managed_app_node" {
-  ami           = "ami-0f7d1f63870577e29" # Amazon Linux 2023 AMI
+  ami           = var.ami_id
   instance_type = var.instance_type
   key_name      = var.key_name # Key pair name, existing in AWS account
 
@@ -77,7 +74,7 @@ resource "aws_instance" "managed_app_node" {
 
 # Create EC2 instance for the managed database node
 resource "aws_instance" "managed_db_node" {
-  ami           = "ami-0f7d1f63870577e29" # Amazon Linux 2023 AMI
+  ami           = var.ami_id
   instance_type = var.instance_type
   key_name      = var.key_name # Key pair name, existing in AWS account
 

@@ -14,8 +14,18 @@ variable "key_name" {
   default = "mba-key-pair"
 }
 
+# The username depends on the distribution of the OS of the web server
+# "ec2-user" - Amazon Linux
+# "ubuntu" - Ubuntu Linux
 variable "username" {
   type        = string
   description = "The username for the local account that will be created on the two EC2 instances"
-  default     = "ec2-user"
+  default     = "ubuntu"
+}
+
+# ami-0f7d1f63870577e29 for Amazon Linux 2023
+variable "ami_id" {
+  type        = string
+  description = "Amazon Machine Image identification"
+  default     = "ami-08af887b5731562d3" # Ubuntu Server 22.04 LTS AMI
 }
