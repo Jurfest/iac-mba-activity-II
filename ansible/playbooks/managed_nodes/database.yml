@@ -6,8 +6,59 @@
   hosts: managed_db_node
   become: true
 
+  vars:
+    ubuntu_version: "jammy"
+
+  tags:
+    - db-install
+
   tasks:
     # Print a success message for debugging purposes
     - name: Print success message
       debug:
         msg: "The MongoDB database server playbook ran successfully."
+    
+    - name: Install gnupg and curl if not installed
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - gnupg
+        - curl
+
+    # Add MongoDB GPG (GNU Privacy Guard)  key
+    - name: Add MongoDB GPG key
+      apt_key:
+        url: https://www.mongodb.org/static/pgp/server-6.0.asc
+
+    - name: Ensure MongoDB repository configuration file exists
+      become: true
+      file:
+        path: /etc/apt/sources.list.d/mongodb-org-6.0.list
+        state: touch
+
+    - name: Configure MongoDB repository with GPG keyring
+      become: true
+      blockinfile:
+        path: /etc/apt/sources.list.d/mongodb-org-6.0.list
+        block: |
+          deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-6.0.gpg ] https://repo.mongodb.org/apt/ubuntu {{ ubuntu_version }}/mongodb-org/6.0 multiverse
+        state: present
+
+    # Update package lists
+    # - name: Update package lists
+    #   apt:
+    #     update_cache: yes
+
+    # Install MongoDB package
+    - name: Install MongoDB package
+      package:
+        name: mongodb-org
+        state: present
+
+    # Start MongoDB service
+    - name: Start MongoDB service
+      service:
+        name: mongod
+        state: started
+        enabled: yes
