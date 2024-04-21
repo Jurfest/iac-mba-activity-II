@@ -1,7 +1,10 @@
-# roles:
-  # - src:
-  #   name:
-  #   version:
+roles:
+  - src: abdennour.golang
+    name: abdennour.golang
+    version: v1.0.12
+  
+  - src: geerlingguy.nodejs
+    name: geerlingguy.nodejs
 
 collections:
   - newswangerd.collection_demo
