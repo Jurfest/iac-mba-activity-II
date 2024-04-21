@@ -1,2 +1,8 @@
-- name: playbook that connects control node and managed node
+- name: playbook that configures managed nodes
   import_playbook: ./configure_managed_node.yml
+- name: playbook DB
+  import_playbook: ./database.yml
+- name: playbook backend
+  import_playbook: ./backend.yml
+- name: playbook frontend
+  import_playbook: ./frontend.yml

@@ -1,0 +1,12 @@
+---
+# 
+
+- name: Configure frontend
+  hosts: managed_app_node
+  become: true
+
+  tasks:
+    # The debug module print a message on the terminal for debugging purpose
+    - name: Print success message
+      debug: 
+        msg: "The frontend playbook ran successfully."

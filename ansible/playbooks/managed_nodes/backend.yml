@@ -1,0 +1,12 @@
+---
+# 
+
+- name: Configure backends
+  hosts: managed_app_node
+  become: true
+
+  tasks:
+    # Print a success message for debugging purposes
+    - name: Print success message
+      debug:
+        msg: "The backend playbook ran successfully."

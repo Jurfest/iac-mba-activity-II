@@ -1,0 +1,13 @@
+---
+# MongoDB Database Server Configuration Playbook
+# This playbook configures an AWS EC2 instance to serve as a MongoDB database host.
+
+- name: Configure MongoDB Database Server (AWS EC2 instance target host for db)
+  hosts: managed_db_node
+  become: true
+
+  tasks:
+    # Print a success message for debugging purposes
+    - name: Print success message
+      debug:
+        msg: "The MongoDB database server playbook ran successfully."
