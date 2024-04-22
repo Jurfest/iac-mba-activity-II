@@ -29,27 +29,44 @@
     # Add MongoDB GPG (GNU Privacy Guard)  key
     - name: Add MongoDB GPG key
       apt_key:
-        url: https://www.mongodb.org/static/pgp/server-6.0.asc
+        url: https://www.mongodb.org/static/pgp/server-7.0.asc
+
+    # ###
+
+    # - name: Check if MongoDB public GPG key is already imported
+    #   stat:
+    #     path: /usr/share/keyrings/mongodb-server-7.0.gpg
+    #   register: gpg_key_status
+
+    # - name: Import MongoDB public GPG key if not already imported
+    #   shell: |
+    #     curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | \
+    #       sudo gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg --dearmor
+    #   args:
+    #     executable: /bin/bash
+    #   when: gpg_key_status.stat.exists == false  
+
+    #  ###
 
     - name: Ensure MongoDB repository configuration file exists
       become: true
       file:
-        path: /etc/apt/sources.list.d/mongodb-org-6.0.list
+        path: /etc/apt/sources.list.d/mongodb-org-7.0.list
         state: touch
 
     - name: Configure MongoDB repository with GPG keyring
       become: true
       blockinfile:
-        path: /etc/apt/sources.list.d/mongodb-org-6.0.list
+        path: /etc/apt/sources.list.d/mongodb-org-7.0.list
         block: |
-          deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-6.0.gpg ] https://repo.mongodb.org/apt/ubuntu {{ ubuntu_version }}/mongodb-org/6.0 multiverse
+          deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu {{ ubuntu_version }}/mongodb-org/7.0 multiverse
         state: present
 
     # Update package lists
-    # - name: Update package lists
-    #   apt:
-    #     update_cache: yes
-
+    - name: Update package lists
+      apt:
+        update_cache: yes
+    
     # Install MongoDB package
     - name: Install MongoDB package
       package:
