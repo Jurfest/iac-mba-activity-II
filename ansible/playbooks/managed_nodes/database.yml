@@ -17,7 +17,7 @@
     - name: Print success message
       debug:
         msg: "The MongoDB database server playbook ran successfully."
-    
+
     - name: Install gnupg and curl if not installed
       apt:
         name: "{{ item }}"
@@ -42,7 +42,7 @@
           sudo gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg --dearmor
       args:
         executable: /bin/bash
-      when: gpg_key_status.stat.exists == false  
+      when: gpg_key_status.stat.exists == false
 
     - name: Ensure MongoDB repository configuration file exists
       become: true
@@ -79,3 +79,105 @@
         name: mongod
         state: started
         enabled: yes
+
+# After get MongoDB up and running, it has to be configured in order to the
+# back-end be able to communicate with it. First we have to setup the admin
+# user. Then the admin user creates the app user - backend user. Finally config
+# database to allow connections - network config.
+
+# This playbook configures user admin to MongoDB database
+- name: Playbook database  - configure admin
+  hosts: managed_db_node
+  become: yes
+
+  vars_files:
+    - vars/managed_db_node/secret.yml
+
+  tags:
+    - db-config-admin
+
+  tasks:
+    - name: pip3 installed
+      package:
+        name: python3-pip
+        state: latest
+
+    - name: pip pymongo installed
+      pip:
+        name: pymongo
+        state: latest
+
+    # - name: admin user
+    #   command: "{{ item }}"
+    #   loop:
+    #   - mongosh admin --eval 'db.dropUser("{{ db_admin_user }}")'
+    #   - |
+    #     mongosh admin --eval 'db.createUser( { user: "{{ db_admin_user }}", pwd: "{{ db_admin_pass }}", roles: [ { role: "clusterAdmin", db: "admin" }, { role: "userAdminAnyDatabase", db: "admin" } ] } )'
+
+    # - name: Drop root user if exists
+    #   mongodb_user:
+    #     login_user: "{{ db_root_user }}"
+    #     login_password: "{{ db_root_pass }}"
+    #     login_port: "27017"
+    #     database: admin
+    #     name: "{{ db_root_user }}"
+    #     state: absent
+    
+    - name: Create MongoDB root user
+      mongodb_user:
+        login_port: "27017"
+        database: "admin"
+        name: "{{ db_root_user }}"
+        password: "{{ db_root_pass }}"
+        roles: "root"
+
+    - name: Create MongoDB administrative user siteUserAdmin
+      mongodb_user:
+        login_user: "{{ db_root_user }}"
+        login_password: "{{ db_root_pass }}"
+        login_port: "27017"
+        database: "admin"
+        name: "{{ db_admin_user }}"
+        password: "{{ db_admin_pass }}"
+        roles:
+          - { db: "admin", role: "readWriteAnyDatabase" }
+          - { db: "admin", role: "dbAdminAnyDatabase" }
+          - { db: "admin", role: "clusterMonitor" }
+
+    - name: Todo (application) db user exsits
+      mongodb_user:
+        login_user: "{{ db_admin_user }}"
+        login_password: "{{ db_admin_pass }}"
+        database: admin
+        user: "{{ db_todo_user }}"
+        password: "{{ db_todo_pass }}"
+        state: present
+        roles:
+          - db: "{{ db_name_todo }}"
+            role: readWrite
+
+    - name: Enable remote connections in MongoDB | accepts connection from anywhere
+      lineinfile:
+        path: /etc/mongod.conf
+        line: "  bindIp: 0.0.0.0"
+        regexp: '^(.*)bindIp(.*)$'
+        state: present
+      notify: 
+        - Restart MongoDB service
+
+    # enable security (/etc/mongod.conf)
+    - name: Enable auth in MongoDB
+      blockinfile:
+        path: /etc/mongod.conf
+        block: |
+          security:
+            authorization: "enabled"
+        state: present
+      notify: Restart MongoDB service
+
+  handlers:
+    # Restart Mongodb
+    - name: Restart MongoDB service
+      service:
+        name: mongod
+        state: restarted
