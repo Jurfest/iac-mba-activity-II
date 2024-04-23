@@ -31,22 +31,18 @@
       apt_key:
         url: https://www.mongodb.org/static/pgp/server-7.0.asc
 
-    # ###
+    - name: Check if MongoDB public GPG key is already imported
+      stat:
+        path: /usr/share/keyrings/mongodb-server-7.0.gpg
+      register: gpg_key_status
 
-    # - name: Check if MongoDB public GPG key is already imported
-    #   stat:
-    #     path: /usr/share/keyrings/mongodb-server-7.0.gpg
-    #   register: gpg_key_status
-
-    # - name: Import MongoDB public GPG key if not already imported
-    #   shell: |
-    #     curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | \
-    #       sudo gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg --dearmor
-    #   args:
-    #     executable: /bin/bash
-    #   when: gpg_key_status.stat.exists == false  
-
-    #  ###
+    - name: Import MongoDB public GPG key if not already imported
+      shell: |
+        curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | \
+          sudo gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg --dearmor
+      args:
+        executable: /bin/bash
+      when: gpg_key_status.stat.exists == false  
 
     - name: Ensure MongoDB repository configuration file exists
       become: true
@@ -62,11 +58,15 @@
           deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu {{ ubuntu_version }}/mongodb-org/7.0 multiverse
         state: present
 
+    # Update package lists using apt-get update
+    - name: Update package lists
+      shell: apt-get update
+
     # Update package lists
     - name: Update package lists
       apt:
         update_cache: yes
-    
+
     # Install MongoDB package
     - name: Install MongoDB package
       package:
