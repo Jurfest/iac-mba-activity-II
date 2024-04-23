@@ -1,12 +1,26 @@
 ---
 # 
 
-- name: Configure backends
+- name: Configure backend - Prebuild
   hosts: managed_app_node
   become: true
+
+  tags:
+      - be-pre-build
 
   tasks:
     # Print a success message for debugging purposes
     - name: Print success message
       debug:
         msg: "The backend playbook ran successfully."
+
+    - name: Install Go
+      import_role:
+        name: abdennour.golang
+      vars:
+        golang_version: "1.14"
+        golang_packages:
+        - github.com/gorilla/mux
+        - go.mongodb.org/mongo-driver/mongo # go get go.mongodb.org/mongo-driver/mongo
+        golang_users:
+        - "{{ ansible_ssh_user }}"
