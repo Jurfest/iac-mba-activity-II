@@ -18,6 +18,7 @@
       debug:
         msg: "The MongoDB database server playbook ran successfully."
 
+    # Install required packages if not already installed
     - name: Install gnupg and curl if not installed
       apt:
         name: "{{ item }}"
@@ -26,16 +27,18 @@
         - gnupg
         - curl
 
-    # Add MongoDB GPG (GNU Privacy Guard)  key
+    # Add MongoDB GPG (GNU Privacy Guard) key
     - name: Add MongoDB GPG key
       apt_key:
         url: https://www.mongodb.org/static/pgp/server-7.0.asc
 
+    # Check if MongoDB public GPG key is already imported
     - name: Check if MongoDB public GPG key is already imported
       stat:
         path: /usr/share/keyrings/mongodb-server-7.0.gpg
       register: gpg_key_status
 
+    # Import MongoDB public GPG key if not already imported
     - name: Import MongoDB public GPG key if not already imported
       shell: |
         curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | \
@@ -44,12 +47,14 @@
         executable: /bin/bash
       when: gpg_key_status.stat.exists == false
 
+    # Ensure MongoDB repository configuration file exists
     - name: Ensure MongoDB repository configuration file exists
       become: true
       file:
         path: /etc/apt/sources.list.d/mongodb-org-7.0.list
         state: touch
 
+    # Configure MongoDB repository with GPG keyring
     - name: Configure MongoDB repository with GPG keyring
       become: true
       blockinfile:
@@ -62,11 +67,10 @@
     - name: Update package lists
       shell: apt-get update
 
-    # Update package lists
+      # Update package lists | TODO: - Try to remove this task
     - name: Update package lists
       apt:
         update_cache: yes
-
     # Install MongoDB package
     - name: Install MongoDB package
       package:
@@ -80,13 +84,11 @@
         state: started
         enabled: yes
 
-# After get MongoDB up and running, it has to be configured in order to the
-# back-end be able to communicate with it. First we have to setup the admin
-# user. Then the admin user creates the app user - backend user. Finally config
-# database to allow connections - network config.
+# MongoDB Database Configuration
+# After setting up MongoDB, it needs configuration to allow backend communication.
+# This playbook sets up the admin user, application user (backend user), and network configurations.
 
-# This playbook configures user admin to MongoDB database
-- name: Playbook database  - configure admin
+- name: Playbook that Configure MongoDB Database
   hosts: managed_db_node
   become: yes
 
@@ -97,15 +99,14 @@
     - db-config-admin
 
   tasks:
-    - name: pip3 installed
+    # Ensure required Python packages are installed
+    - name: Install required Python packages
       package:
-        name: python3-pip
+        name: "{{ item }}"
         state: latest
-
-    - name: pip pymongo installed
-      pip:
-        name: pymongo
-        state: latest
+      loop:
+        - python3-pip
+        - pymongo
 
     # - name: admin user
     #   command: "{{ item }}"
@@ -122,7 +123,8 @@
     #     database: admin
     #     name: "{{ db_root_user }}"
     #     state: absent
-    
+
+    # Create MongoDB root user
     - name: Create MongoDB root user
       mongodb_user:
         login_port: "27017"
@@ -131,7 +133,8 @@
         password: "{{ db_root_pass }}"
         roles: "root"
 
-    - name: Create MongoDB administrative user siteUserAdmin
+    # Create MongoDB administrative user
+    - name: Create MongoDB administrative user
       mongodb_user:
         login_user: "{{ db_root_user }}"
         login_password: "{{ db_root_pass }}"
@@ -144,7 +147,7 @@
           - { db: "admin", role: "dbAdminAnyDatabase" }
           - { db: "admin", role: "clusterMonitor" }
 
-    - name: Todo (application) db user exsits
+    - name: Create Todo (application) database user
       mongodb_user:
         login_user: "{{ db_admin_user }}"
         login_password: "{{ db_admin_pass }}"
@@ -156,7 +159,8 @@
           - db: "{{ db_name_todo }}"
             role: readWrite
 
-    - name: Enable remote connections in MongoDB | accepts connection from anywhere
+    # Enable remote connections in MongoDB (accepts connections from anywhere)
+    - name: Enable remote connections in MongoDB
       lineinfile:
         path: /etc/mongod.conf
         line: "  bindIp: 0.0.0.0"
@@ -165,8 +169,8 @@
       notify: 
         - Restart MongoDB service
 
-    # enable security (/etc/mongod.conf)
-    - name: Enable auth in MongoDB
+    # Enable authentication in MongoDB (/etc/mongod.conf)
+    - name: Enable authentication in MongoDB
       blockinfile:
         path: /etc/mongod.conf
         block: |
@@ -176,7 +180,7 @@
       notify: Restart MongoDB service
 
   handlers:
-    # Restart Mongodb
+    # Restart MongoDB service
     - name: Restart MongoDB service
       service:
         name: mongod
