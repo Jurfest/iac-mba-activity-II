@@ -81,7 +81,7 @@
     #    This task generates an environment file containing environment variables required by the Todo application.
     #    It includes the tasks defined in 'tasks/backend_env_file.yaml'.
     - name: Generate environment file for Todo
-      include_tasks: tasks/backend_env_file.yaml
+      include_tasks: tasks/backend_env_file.yml
 
     # 3. Deploy backend application binary
     #    This task deploys the backend application binary from '/tmp/todo' to '/usr/local/bin/todo'.
