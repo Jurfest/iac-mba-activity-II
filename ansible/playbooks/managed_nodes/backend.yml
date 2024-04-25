@@ -43,13 +43,28 @@
         path: "{{ be_build_workspace }}"
         state: directory
 
-    - name: git checkout
+    - name: Check if the repository directory exists
+      stat:
+        path: "{{ be_build_workspace }}/{{ be_repo_name }}"
+      register: repo_dir_status
+
+    - name: Fetch the code if repository directory doesn't exist
       git:
         repo: "{{ be_repo_url }}"
         dest: "{{ be_build_workspace }}/{{ be_repo_name }}"
+      when: not repo_dir_status.stat.exists
 
     - name: go build
       # shell: . /etc/profile;go build -o {{ be_tmp_bin }}
       shell: . /etc/profile;go build -o /tmp/todo
       args:
         chdir: "{{ be_build_workspace }}/{{ be_repo_name }}/server"
+
+- name: Play backend - Deploy
+  hosts: managed_app_node
+  become: true
+
+  tags:
+      - be-deploy
+
+  tasks: []
