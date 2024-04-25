@@ -60,7 +60,7 @@
       args:
         chdir: "{{ be_build_workspace }}/{{ be_repo_name }}/server"
 
-- name: Play backend - Deploy
+- name: Deploy backend application
   hosts: managed_app_node
   become: true
 
@@ -68,32 +68,41 @@
     - be-deploy
 
   tasks:
-    # 1 - Create Systemd Service Todo which populates (2) & manages (3)
-    #       -> notify: `systemctl reload-daemon`
-    - name: systemd service todo is generated
+    # 1. Generate systemd service file for Todo application
+    #    This task generates the systemd service file required to manage the Todo application.
+    #    It triggers a systemd daemon reload upon completion.
+    - name: Generate systemd service file for Todo
       template:
         src: todo.service.j2
         dest: /lib/systemd/system/todo.service
-      notify: systemd reloaded
-      
-      # 2 - Put env vars in seperated file ( `/etc/todo.env`)
-    - name: todo env file is generated
+      notify: Reload systemd daemon
+
+    # 2. Generate environment file for Todo application
+    #    This task generates an environment file containing environment variables required by the Todo application.
+    #    It includes the tasks defined in 'tasks/backend_env_file.yaml'.
+    - name: Generate environment file for Todo
       include_tasks: tasks/backend_env_file.yaml
 
-      # 3 - Move buid file from `/tmp/todo` to a standard place (`/usr/local/bin/todo`)
-      #       -> notify: `systemctl restart todo`
-    - name: backend is deployed
+    # 3. Deploy backend application binary
+    #    This task deploys the backend application binary from '/tmp/todo' to '/usr/local/bin/todo'.
+    #    It sets appropriate permissions and triggers a restart of the Todo service.
+    - name: Deploy backend application
       copy:
         src: "{{ be_tmp_bin }}"
         dest: "{{ be_prod_bin }}"
         mode: a+x
         remote_src: yes
-      notify: backend restarted
+      notify: Restart backend service
+
   handlers:
-    - name: systemd reloaded
+    # Handler to reload systemd daemon after generating the service file
+    - name: Reload systemd daemon
       systemd:
         daemon_reload: yes
-    - name: backend restarted
+
+    # Handler to restart the Todo service after deploying the backend application
+    - name: Restart backend service
       service:
         name: todo
         state: restarted
+
