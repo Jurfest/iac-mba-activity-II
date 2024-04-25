@@ -1,24 +1,38 @@
 # TODO: - Move to roles
 
-- name: Include vars file dynamically
+- name: Include vars files dynamically
   include_vars:
-    file: ../vars/managed_db_node/secret.yml
+    file: "{{ item }}"
+  loop:
+    - ../vars/managed_db_node/secret.yml
+    - ../../host_groups/managed_app_node/vars.yml # FIXME: shouldn't be necessary
 
-- name: env file exists
+- name: Ensure directory exists for todo.env
+  file:
+    path: /etc
+    state: directory
+
+- name: Ensure todo.env file exists
   file:
     path: "{{ be_env_file }}"
-    state: file
+    state: touch
 
-# Populate  DB_NAME
-- name: DB_NAME env var is up-to-date
+# - name: Env file exists
+#   file:
+#     path: "{{ be_env_file }}"
+#     state: file
+
+# Populate DB_NAME in todo.env
+- name: Update DB_NAME in todo.env
   lineinfile:
     path: "{{ be_env_file }}"
     line: DB_NAME={{ db_name_todo }}
     regexp: '^DB_NAME='
 
-# Populate DB_CONNECTION
-- name: DB_CONNECTION env var is up-to-date
+# Populate DB_CONNECTION in todo.env
+- name: Update DB_CONNECTION in todo.env
   lineinfile:
     path: "{{ be_env_file }}"
-    line: DB_CONNECTION=mongodb://{{ db_todo_user }}:{{ db_todo_pass }}@{{ groups['managed_db_node']['ansible_facts']['default_ipv4']['address'] }}:27017
+    # line: DB_CONNECTION=mongodb://{{ db_todo_user }}:{{ db_todo_pass }}@{{ groups['managed_db_node']['ansible_facts']['default_ipv4']['address'] }}:27017
+    line: DB_CONNECTION=mongodb://{{ db_todo_user }}:{{ db_todo_pass }}@{{ groups['managed_db_node'][0] }}:27017
     regexp: '^DB_CONNECTION='

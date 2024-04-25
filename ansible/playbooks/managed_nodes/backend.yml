@@ -2,7 +2,7 @@
 #
 
 # Ansible_facts of managed_db_node is defined
-- name: Play just to load managed_db_node hostvars
+- name: Play just to load managed_db_node host groups
   hosts: managed_db_node
   tasks: []
 
@@ -84,20 +84,20 @@
 
     # 2. Generate environment file for Todo application
     #    This task generates an environment file containing environment variables required by the Todo application.
-    #    It includes the tasks defined in 'tasks/backend_env_file.yaml'.
+    #    It includes the tasks defined in 'tasks/backend_env_file.yml'.
     - name: Generate environment file for Todo
       include_tasks: tasks/backend_env_file.yml
 
     # 3. Deploy backend application binary
     #    This task deploys the backend application binary from '/tmp/todo' to '/usr/local/bin/todo'.
     #    It sets appropriate permissions and triggers a restart of the Todo service.
-    - name: Deploy backend application
-      copy:
-        src: "{{ be_tmp_bin }}"
-        dest: "{{ be_prod_bin }}"
-        mode: a+x
-        remote_src: yes # specifies that the source is on the remote machine
-      notify: Restart backend service
+    # - name: Deploy backend application
+    #   copy:
+    #     src: "{{ be_tmp_bin }}"
+    #     dest: "{{ be_prod_bin }}"
+    #     mode: a+x
+    #     remote_src: yes # specifies that the source is on the remote machine
+    #   notify: Restart backend service
 
   handlers:
     # Handler to reload systemd daemon after generating the service file

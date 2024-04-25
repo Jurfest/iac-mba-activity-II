@@ -5,7 +5,7 @@ Description=todo
 Type=simple
 Restart=always
 RestartSec=5s
-ExecStart={{ be_prod_bin }}
-EnvironmentFile={{ be_env_file }}
+ExecStart=/usr/local/bin/todo
+EnvironmentFile=/etc/todo.env
 [Install]
 WantedBy=multi-user.target
