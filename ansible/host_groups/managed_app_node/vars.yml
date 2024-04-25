@@ -1,0 +1,4 @@
+---
+be_tmp_bin: /tmp/todo
+be_prod_bin: /usr/local/bin/todo
+be_env_file: /etc/todo.env

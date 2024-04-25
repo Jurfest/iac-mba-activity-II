@@ -1,6 +1,11 @@
 ---
 #
 
+# Ansible_facts of managed_db_node is defined
+- name: Play just to load managed_db_node hostvars
+  hosts: managed_db_node
+  tasks: []
+
 - name: Configure backend - Prebuild
   hosts: managed_app_node
   become: true
@@ -91,7 +96,7 @@
         src: "{{ be_tmp_bin }}"
         dest: "{{ be_prod_bin }}"
         mode: a+x
-        remote_src: yes
+        remote_src: yes # specifies that the source is on the remote machine
       notify: Restart backend service
 
   handlers:
