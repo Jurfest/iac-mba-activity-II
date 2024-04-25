@@ -137,6 +137,7 @@
     # Create MongoDB root user
     - name: Create MongoDB root user
       mongodb_user:
+        # NOTE: - Remove default port?
         login_port: "27017"
         database: "admin"
         name: "{{ db_root_user }}"
