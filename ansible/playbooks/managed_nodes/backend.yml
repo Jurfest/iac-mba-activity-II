@@ -24,3 +24,32 @@
         - go.mongodb.org/mongo-driver/mongo # go get go.mongodb.org/mongo-driver/mongo
         golang_users:
         - "{{ ansible_ssh_user }}"
+
+- name: Play backend - Build
+  hosts: managed_app_node
+  become: true
+
+  vars:
+      be_build_workspace: /opt/build_dir
+      be_repo_url: https://github.com/kubernetes-tn/go-to-do-app.git
+      be_repo_name: go-to-do-app
+
+  tags:
+      - be-build
+
+  tasks:
+    - name: workspace build exists
+      file:
+        path: "{{ be_build_workspace }}"
+        state: directory
+
+    - name: git checkout
+      git:
+        repo: "{{ be_repo_url }}"
+        dest: "{{ be_build_workspace }}/{{ be_repo_name }}"
+
+    - name: go build
+      # shell: . /etc/profile;go build -o {{ be_tmp_bin }}
+      shell: . /etc/profile;go build -o /tmp/todo
+      args:
+        chdir: "{{ be_build_workspace }}/{{ be_repo_name }}/server"
