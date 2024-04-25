@@ -100,13 +100,23 @@
 
   tasks:
     # Ensure required Python packages are installed
-    - name: Install required Python packages
+    # - name: Install required Python packages
+    #   package:
+    #     name: "{{ item }}"
+    #     state: latest
+    #   loop:
+    #     - python3-pip
+    #     - pymongo
+
+    - name: pip3 installed
       package:
-        name: "{{ item }}"
+        name: python3-pip
         state: latest
-      loop:
-        - python3-pip
-        - pymongo
+
+    - name: pip pymongo installed
+      pip:
+        name: pymongo
+        state: latest
 
     # - name: admin user
     #   command: "{{ item }}"
