@@ -33,6 +33,6 @@
 - name: Update DB_CONNECTION in todo.env
   lineinfile:
     path: "{{ be_env_file }}"
-    # line: DB_CONNECTION=mongodb://{{ db_todo_user }}:{{ db_todo_pass }}@{{ groups['managed_db_node']['ansible_facts']['default_ipv4']['address'] }}:27017
-    line: DB_CONNECTION=mongodb://{{ db_todo_user }}:{{ db_todo_pass }}@{{ groups['managed_db_node'][0] }}:27017
+    # line: mongodb://username:password@host:port/database
+    line: DB_CONNECTION=mongodb://{{ db_todo_user }}:{{ db_todo_pass }}@{{ hostvars[groups['managed_db_node'][0]]['ansible_default_ipv4']['address'] }}:27017
     regexp: '^DB_CONNECTION='
