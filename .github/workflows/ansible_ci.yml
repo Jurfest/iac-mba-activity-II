@@ -39,7 +39,7 @@ jobs:
       #     role-to-assume: ${{ secrets.ROLE_ASSUME }}
 
       - name: Install Ansible-Galaxy Requirements
-        run: ansible-galaxy install -r requirements.yaml
+        run: ansible-galaxy install -r ansible/requirements.yml
 
       - name: Test and validate Ansible playbooks
         run: ansible-lint ansible/playbooks/control_node/configure_control_node.yml
