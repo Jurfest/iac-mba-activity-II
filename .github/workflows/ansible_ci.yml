@@ -14,10 +14,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: "3.x"
 
@@ -42,7 +42,7 @@ jobs:
         run: ansible-galaxy install -r ansible/requirements.yml
 
       - name: Test and validate Ansible playbooks
-        run: ansible-lint --exclude fqcn --exclude-path '*/roles/*' ansible/playbooks/control_node/configure_control_node.yml
+        run: ansible-lint --exclude fqcn --exclude '*/roles/*' ansible/playbooks/control_node/configure_control_node.yml
 
 
       - name: Run Ansible playbook
