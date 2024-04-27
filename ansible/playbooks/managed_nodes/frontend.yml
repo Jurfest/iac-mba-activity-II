@@ -1,24 +1,75 @@
 ---
 # 
 
-- name: Prebuild Setup for Frontend
-  hosts: managed_app_node
-  become: true
+# - name: Prebuild Setup for Frontend | Install Node.js on EC2 instance
+#   hosts: managed_app_node
+#   become: true
 
-  tags:
-  - fe-pre-build
+#   vars:
+#     nodejs_version: "14.x"
+    
+#   tags:
+#   - fe-pre-build
   
-  tasks:
-    # The debug module print a message on the terminal for debugging purpose
-    - name: Print success message
-      debug: 
-        msg: "The frontend playbook ran successfully."
+#   tasks:
+#     # The debug module print a message on the terminal for debugging purpose
+#     # - name: Print success message
+#     #   debug: 
+#     #     msg: "The frontend playbook ran successfully."
 
-    - name: Ensure Node.js is Installed
-      import_role:
-        name: geerlingguy.nodejs
-      vars:
-        nodejs_version: "18.x" # 13.x
+#     # - name: Ensure Node.js is Installed
+#     #   import_role:
+#     #     name: geerlingguy.nodejs
+#     #   vars:
+#     #     nodejs_version: "13.x"
+
+#     - name: Update apt cache
+#       apt:
+#         update_cache: yes
+
+#     - name: Install Node.js prerequisites
+#       apt:
+#         name:
+#           - curl
+#           - software-properties-common
+
+#     - name: Add Node.js GPG key
+#       apt_key:
+#         url: "https://deb.nodesource.com/gpgkey/nodesource.gpg.key"
+#         state: present
+
+#     - name: Add Node.js repository
+#       apt_repository:
+#         repo: "deb https://deb.nodesource.com/node_{{ nodejs_version }} {{ ansible_distribution_release }} main"
+#         state: present
+#         update_cache: yes
+
+#     - name: Install Node.js
+#       apt:
+#         name: nodejs
+#         state: present
+
+#     - name: Update package cache
+#       apt:
+#         update_cache: yes
+
+#     - name: Install required dependencies for npm
+#       apt:
+#         name: "{{ item }}"
+#         state: present
+#       loop:
+#         - node-agent-base
+#         - node-aproba
+#         - node-archy
+#         - node-cacache
+#         - node-chalk
+#         # Add all other required dependencies here
+
+#     - name: Install npm
+#       apt:
+#         name: npm
+#         state: present
+
 
 - name: Build Frontend Application
   hosts: managed_app_node
@@ -37,12 +88,18 @@
       file:
         path: "{{ be_build_workspace }}"
         state: directory
+    
+    - name: Check if the repository directory exists
+      stat:
+        path: "{{ be_build_workspace }}/{{ be_repo_name }}"
+      register: repo_dir_status
 
-    - name: Clone Repository
+    - name: Clone repository if it's directory doesn't exist
       git:
         repo: "{{ be_repo_url }}"
         dest: "{{ be_build_workspace }}/{{ be_repo_name }}"
-
+      when: not repo_dir_status.stat.exists 
+    
     - name: Install npm Dependencies
       npm:
         path: "{{ be_build_workspace }}/{{ be_repo_name }}/client"
@@ -73,12 +130,29 @@
         chdir: "{{ fe_deploy_dir }}"
       ignore_errors: yes
 
+    - name: Create Client Deployment Directory
+      file:
+        path: "{{ fe_deploy_dir }}"
+        state: directory
+        mode: '0755'
+
+    - name: Check if .env file exists
+      stat:
+        path: "{{ fe_deploy_dir }}/.env"
+      register: env_file
+
+    - name: Create .env file if it doesn't exist
+      copy:
+        content: "REACT_APP_API_ENDPOINT=http://{{ groups['managed_db_node'][0] }}:8080\n"
+        dest: "{{ fe_deploy_dir }}/.env"
+      when: env_file.stat.exists == False
+
     - name: Configure Frontend to Connect to Backend API
       lineinfile:
         path: "{{ fe_deploy_dir }}/.env"
         regexp: '^REACT_APP_API_ENDPOINT='
-        # line: REACT_APP_API_ENDPOINT=http://{{ ansible_host }}:8080
         line: REACT_APP_API_ENDPOINT=http://{{ groups['managed_db_node'][0] }}:8080
+      when: env_file.stat.exists == True
 
     - name: Start Application Using PM2
       shell: pm2 start node_modules/react-scripts/scripts/start.js --name todo
