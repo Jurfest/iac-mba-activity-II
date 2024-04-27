@@ -1,0 +1,30 @@
+---
+- name: MongoDB Database Backup and Recovery
+  hosts: managed_db_node
+  become: true
+  gather_facts: false
+
+  vars:
+    backup_dir: "/backup"
+
+  tasks:
+    - name: Ensure backup directory exists
+      file:
+        path: "{{ backup_dir }}"
+        state: directory
+        mode: '0755'
+
+    - name: Backup MongoDB database
+      shell: mongodump --out {{ backup_dir }}/mongodump
+      args:
+        creates: "{{ backup_dir }}/mongodump"
+
+    - name: Compress backup files
+      shell: tar -czf {{ backup_dir }}/mongodb_backup.tar.gz -C {{ backup_dir }}/mongodump .
+      args:
+        creates: "{{ backup_dir }}/mongodb_backup.tar.gz"
+
+    - name: Clean up temporary backup files
+      file:
+        path: "{{ backup_dir }}/mongodump"
+        state: absent
