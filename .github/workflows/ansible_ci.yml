@@ -39,11 +39,10 @@ jobs:
       #     role-to-assume: ${{ secrets.ROLE_ASSUME }}
 
       - name: Test and validate Ansible playbooks
-        run: ansible-lint ansible/playbooks/control_node/control_node.yml
+        run: ansible-lint ansible/playbooks/control_node/configure_control_node.yml
 
       - name: Run Ansible playbook
-      # run: ansible-playbook -i ansible/inventory.ini ansible/playbooks/control_node/control_node.yml
-        run: ansible-playbook -i ansible/inventory.ini ansible/playbooks/control_node/configure_control_node.yml
+        run: ansible-playbook -i ansible/inventory.ini ansible/playbooks/control_node/control_node.yml
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
