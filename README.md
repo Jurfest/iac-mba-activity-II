@@ -30,9 +30,9 @@ git clone https://github.com/jurfest/iac-mba-activity-II
 - `.github/`: Configuration for GitHub Actions.
 - `terraform/`: Infrastructure configuration with Terraform.
 - `ansible/`: Ansible playbooks for configuration and management of the infrastructure.
-- `ci-cd/`: Configuration of the CI/CD pipeline for automated testing and deployment.
-- `monitoring-logging/`: Configuration of monitoring with CloudWatch and logging with CloudTrail and ELK Stack.
-- `backup-recovery/`: Playbooks for backup and recovery of critical data.
+<!-- - `ci-cd/`: Configuration of the CI/CD pipeline for automated testing and deployment. -->
+<!-- - `monitoring-logging/`: Configuration of monitoring with CloudWatch and logging with CloudTrail and ELK Stack. -->
+<!-- - `backup-recovery/`: Playbooks for backup and recovery of critical data. -->
 
 ## Contributions
 
