@@ -47,6 +47,8 @@ jobs:
       - name: Test and validate Ansible playbooks
         run: ansible-lint ansible/playbooks/control_node/configure_control_node.yml
 
+        # TODO: - Add step to run go script that generates dynamic inventory
+
       - name: Run Ansible playbook
         run: ansible-playbook -i ansible/inventory.ini ansible/playbooks/control_node/control_node.yml
         env:
