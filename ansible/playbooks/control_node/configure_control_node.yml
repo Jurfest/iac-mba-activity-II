@@ -11,19 +11,19 @@
 
   tasks:
     - name: Install Apache web server
-      package:
+      ansible.builtin.package:
         name: "{{ webserver }}"
         state: present
 
     - name: Copy HTML template file to control node
-      copy:
+      ansible.builtin.copy:
         src: ../../roles/control_node/templates/index.html.j2
         dest: /var/www/html/index.html
         mode: "0644"
       notify: Restart Apache # If necessary, restart the web server after copying the HTML file
 
     - name: Ensure Apache service is running and enabled
-      service:
+      ansible.builtin.service:
         name: "{{ webserver }}"
         state: started
         enabled: true
