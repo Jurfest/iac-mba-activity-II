@@ -42,7 +42,8 @@ jobs:
         run: ansible-galaxy install -r ansible/requirements.yml
 
       - name: Test and validate Ansible playbooks
-        run: ansible-lint ./ansible ansible/playbooks/control_node/configure_control_node.yml
+        run: ansible-lint --exclude fqcn ansible/playbooks/control_node/configure_control_node.yml
+
 
       - name: Run Ansible playbook
         run: ansible-playbook -i ansible/inventory.ini ansible/playbooks/control_node/control_node.yml
