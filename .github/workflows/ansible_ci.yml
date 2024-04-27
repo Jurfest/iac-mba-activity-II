@@ -41,9 +41,13 @@ jobs:
       - name: Install Ansible-Galaxy Requirements
         run: ansible-galaxy install -r ansible/requirements.yml
 
-      - name: Test and validate Ansible playbooks
-        run: ansible-lint --exclude fqcn --exclude '*/roles/*' --exclude '*/managed_nodes/**/*' --exclude '*/managed_nodes/*' ansible/playbooks/control_node/configure_control_node.yml
+      # - name: Test and validate Ansible playbooks
+        # run: ansible-lint --exclude fqcn --exclude '*/roles/*' --exclude '*/managed_nodes/**/*' --exclude '*/managed_nodes/*' ansible/playbooks/control_node/configure_control_node.yml
 
+      - name: Test and validate Ansible playbook
+        run: |
+          playbook_file=$(find ansible/playbooks/control_node/configure_control_node.yml)
+          ansible-lint "$playbook_file"
 
       - name: Run Ansible playbook
         run: ansible-playbook -i ansible/inventory.ini ansible/playbooks/control_node/control_node.yml
