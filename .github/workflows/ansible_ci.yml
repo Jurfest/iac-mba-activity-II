@@ -38,11 +38,11 @@ jobs:
       #     aws-region: ${{ secrets.AWS_REGION }}
       #     role-to-assume: ${{ secrets.ROLE_ASSUME }}
 
-      # - name: Install Ansible-Galaxy Requirements
-      #   run: ansible-galaxy install -r ansible/requirements.yml
+      - name: Install Ansible-Galaxy Requirements
+        run: ansible-galaxy install -r ansible/requirements.yml
 
       - name: Test and validate Ansible playbooks
-        run: ansible-lint ansible/playbooks/control_node/configure_control_node.yml
+        run: ansible/ansible-lint ansible/playbooks/control_node/configure_control_node.yml
 
       - name: Run Ansible playbook
         run: ansible-playbook -i ansible/inventory.ini ansible/playbooks/control_node/control_node.yml
