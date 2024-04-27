@@ -28,4 +28,5 @@ variable "ami_id" {
   type        = string
   description = "Amazon Machine Image identification"
   default     = "ami-08af887b5731562d3" # Ubuntu Server 22.04 LTS AMI
+  # default     = "ami-0cc56294a584ac234" # Ubuntu Server 18.04 LTS AMI
 }

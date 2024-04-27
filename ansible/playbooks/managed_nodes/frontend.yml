@@ -1,12 +1,87 @@
 ---
 # 
 
-- name: Configure frontend
+- name: Prebuild Setup for Frontend
   hosts: managed_app_node
   become: true
 
+  tags:
+  - fe-pre-build
+  
   tasks:
     # The debug module print a message on the terminal for debugging purpose
     - name: Print success message
       debug: 
         msg: "The frontend playbook ran successfully."
+
+    - name: Ensure Node.js is Installed
+      import_role:
+        name: geerlingguy.nodejs
+      vars:
+        nodejs_version: "18.x" # 13.x
+
+- name: Build Frontend Application
+  hosts: managed_app_node
+  become: yes
+  vars:
+    be_build_workspace: /opt/build_dir
+    be_repo_url: https://github.com/kubernetes-tn/go-to-do-app.git
+    be_repo_name: go-to-do-app
+
+  tags:
+    - fe-build
+
+  tasks:
+
+    - name: Ensure Workspace Build Directory Exists
+      file:
+        path: "{{ be_build_workspace }}"
+        state: directory
+
+    - name: Clone Repository
+      git:
+        repo: "{{ be_repo_url }}"
+        dest: "{{ be_build_workspace }}/{{ be_repo_name }}"
+
+    - name: Install npm Dependencies
+      npm:
+        path: "{{ be_build_workspace }}/{{ be_repo_name }}/client"
+        state: present
+
+- name: Deploy Frontend Application
+  hosts: managed_app_node
+  become: yes
+
+  vars:
+    fe_deploy_dir: /opt/build_dir/go-to-do-app/client
+
+  tags:
+    - fe-deploy
+
+  tasks:
+
+    - name: Install PM2 Globally
+      npm:
+        name: pm2
+        global: yes
+        production: yes
+        state: present
+
+    - name: Stop Currently Running Application
+      shell: pm2 stop todo
+      args:
+        chdir: "{{ fe_deploy_dir }}"
+      ignore_errors: yes
+
+    - name: Configure Frontend to Connect to Backend API
+      lineinfile:
+        path: "{{ fe_deploy_dir }}/.env"
+        regexp: '^REACT_APP_API_ENDPOINT='
+        # line: REACT_APP_API_ENDPOINT=http://{{ ansible_host }}:8080
+        line: REACT_APP_API_ENDPOINT=http://{{ groups['managed_db_node'][0] }}:8080
+
+    - name: Start Application Using PM2
+      shell: pm2 start node_modules/react-scripts/scripts/start.js --name todo
+      args:
+        chdir: "{{ fe_deploy_dir }}"
+      ignore_errors: yes
