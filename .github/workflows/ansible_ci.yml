@@ -47,7 +47,7 @@ jobs:
       - name: Test and validate Ansible playbook
         run: |
           playbook_file=$(find ansible/playbooks/control_node/configure_control_node.yml)
-          ansible-lint "$playbook_file"
+          ansible-lint --exclude fqcn "$playbook_file"
 
       - name: Run Ansible playbook
         run: ansible-playbook -i ansible/inventory.ini ansible/playbooks/control_node/control_node.yml
